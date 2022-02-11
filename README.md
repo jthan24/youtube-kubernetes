@@ -10,3 +10,4 @@
 |--------------|----------|
 |[devops-kubernetes-nomuerasenelintento-p3.md](./devops-kubernetes-nomuerasenelintento-p3.md)|Nuestro video #3 de instalacion de kubernetes|
 |[devops-kubernetes-nomuerasenelintento-p4.md](./devops-kubernetes-nomuerasenelintento-p4.md)|Nuestro video #4 de acceso a kubernetes con diferentes herramientas|
+|[devops-kubernetes-nomuerasenelintento-p5.md](./devops-kubernetes-nomuerasenelintento-p5.md)|Nuestro video #5 de Autenticacion y autorizacion en kubernetes|
