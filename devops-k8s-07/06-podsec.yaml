@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-secrets
+spec:
+  containers:
+    - name: demo
+      image: alpine
+      command: ["sleep", "3600"]
+      env:
+        - name: USUARIO_DB_ENV
+          valueFrom:
+            secretKeyRef:
+              name: my-constrasenia 
+              key: usuario 
+        - name: CONTRASENIA_DB_ENV
+          valueFrom:
+            secretKeyRef:
+              name: my-constraseniayaml
+              key: password
+      volumeMounts:
+      - name: secretvol
+        mountPath: "/secrets"
+        readOnly: true
+  volumes:
+  - name: secretvol
+    secret:
+      secretName: my-constrasenia
+      items:
+      - key: "password"
+        path: "passwordFile"

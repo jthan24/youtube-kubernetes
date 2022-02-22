@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: 03db-configyaml
+data:
+  host: 192.168.10.90
+  port: "1455"
