@@ -1,0 +1,36 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: name-based-ingress
+spec:
+  rules:
+  - host: midominio2.com
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: default-backend
+            port:
+              number: 80
+  - host: v1.midominio.com
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: web-app-v1
+            port:
+              number: 8080
+  - host: v2.midominio.com
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: web-app-v2
+            port:
+              number: 8080
