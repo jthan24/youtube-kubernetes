@@ -109,10 +109,11 @@ kubectl get csr john_doe -o jsonpath="{.status.certificate}" | base64 -d > john_
 
 Podremos ver que el certificado esta firmado por "kubernetes" (Autoridad firmante). Si no le definimos tiempo de expiración por defecto estará valido por un año
 
-```openssl x509 -in john_doe.crt -text```
+```
+openssl x509 -in john_doe.crt -text
+```
 
-
-En resumen, john_doe ahora es un usuario normal que usa el certifiacdo john_doe.crt and john_doe.key para autenticarse e invocar el API. Esto es poque el certificado ha sido firmado por el cluster de kubernetes.
+En resumen, john_doe ahora es un usuario normal que usa el certificado john_doe.crt and john_doe.key para autenticarse e invocar el API. Esto es poque el certificado ha sido firmado por el cluster de kubernetes.
 
 
 ------------------------------------
@@ -127,7 +128,9 @@ kubectl config view
 
 - Si intentaramos realizar una peticón al api obtendriamos un error
 
-```kubectl --context=john_doe get pods```
+```
+kubectl --context=john_doe get pods
+```
 
 ![Authentication_without_context](Images/error_authentication1.png)
 
@@ -139,7 +142,9 @@ kubectl config set-credentials john_doe --client-key=john_doe.key --client-certi
 
 - Asociaremos usuario y cluster, con ello obtendremos el contexto
 
-```kubectl config set-context john_doe --cluster=minikube --user=john_doe```
+```
+kubectl config set-context john_doe --cluster=minikube --user=john_doe
+```
 
 - Podremos visualizar los cambios en el kubeconfig
 
@@ -149,7 +154,9 @@ kubectl config view
 
 - Ahora para validar la conexión intentemos realizar una petición al API
 
-```kubectl --context=john_doe get pods```
+```
+kubectl --context=john_doe get pods
+```
 
 ![Authentication_without_authorization](Images/error_authentication2.png)
 
@@ -162,8 +169,8 @@ La autorización especifica los derechos o privilegios de acceso a los recursos 
 En kubernetes contamos con:
 
 -  **Role**: Un Role declara los permisos que afectan a los namespaces, cuenta con:
-  - Recursos: Pods, services, volumens, etc
-  - Verbs: Acciones que se pueden hacer sobre los recursos (Get, List, etc)
+   - Recursos: Pods, services, volumens, etc
+   - Verbs: Acciones que se pueden hacer sobre los recursos (Get, List, etc)
 
 - **Role Bindings**: Asocia a un grupo de usuarios con un rol
 
@@ -189,6 +196,9 @@ kubectl create role developer --verb=create --verb=get --verb=list --verb=update
 kubectl get role developer -o yaml
 ```
 
+**Nota: Fijensé que por defecto el namespace asignado es *default*, es así que los privilegios del role se limitan a solo ese namespace.**
+
+
 - Por último asociaremos el rol *developer* creado al usuario *john_doe*
 
 ```
@@ -197,4 +207,12 @@ kubectl create rolebinding developer-binding-john_doe --role=developer --user=jo
 
 - Ahora, sí podremos utilizar el usuario *john_doe* para consultar contra el api de kubernetes
 
-```kubectl --context=john_doe get pods```
+```
+kubectl --context=john_doe get pods
+```
+
+- Recuerde, como el role fue creado sobre el namespace default, si el usuario intentara acceder a los recursos de otro namespace como *kube-system* no tendría los privilegios de hacerlo
+
+```
+kubectl --context=john_doe get pods -ns kube-system
+```
