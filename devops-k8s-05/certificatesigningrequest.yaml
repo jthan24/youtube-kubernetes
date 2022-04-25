@@ -1,0 +1,12 @@
+apiVersion: certificates.k8s.io/v1
+kind: CertificateSigningRequest
+metadata:
+  name: john_doe
+spec:
+  signerName: kubernetes.io/kube-apiserver-client
+  groups:
+  - system:authenticated  
+  request: BASE64ENCODE
+  expirationSeconds: 86400  # (86400=one day) This line is optional, could be omitted
+  usages:
+  - client auth
